@@ -3,7 +3,7 @@ from threading import Thread
 import os
 import telebot
 
-TELEGRAM_TOKEN = '8668983865:AAFko-GOeu7_AVdSryLhhfr7yJ5twpbYWcc'
+TELEGRAM_TOKEN = '8668983865:AAG_ppMVN7Zi_Ph6bWsfVGcFT3zHl-67FN0'
 bot = telebot.TeleBot(TELEGRAM_TOKEN)
 
 app = Flask('')
@@ -24,7 +24,7 @@ def keep_alive():
 # /start command
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    bot.reply_to(message, "Arre bhai! Ami copy-cat bot. Group e amake reply dile ba 'copy cat' bollei ami copy korbo! 😎")
+    bot.reply_to(message, "Arre bhai! Ami copy-cat bot. Group e reply dile ba 'copy cat' bollei ami copy korbo! 😎")
 
 # Copy-cat handler
 @bot.message_handler(func=lambda message: True)
@@ -38,14 +38,15 @@ def copy_cat(message):
         is_reply_to_bot = message.reply_to_message and message.reply_to_message.from_user.id == bot.get_me().id
         is_called_copycat = "copy cat" in user_text.lower() or "copycat" in user_text.lower()
         
-        # Group e na toh reply kora hoyeche, ar na toh "copy cat" bola hoyeche, tahole ignore korbe
+        # Group e reply ba "copy cat" na thakle ignore korbe
         if not (is_reply_to_bot or is_called_copycat):
             return
 
-    # Private chat hole normal copy korbe, ar group e reply ba "copy cat" thakle copy korbe
+    # Private chat hole normal copy korbe, ar group e condition match korle copy korbe
     bot.reply_to(message, user_text)
 
 if __name__ == "__main__":
     keep_alive()
     print("Copy-cat Bot polling started...")
     bot.infinity_polling()
+    

@@ -24,7 +24,10 @@ def keep_alive():
 # /start command
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    bot.reply_to(message, "Arre bhai! Ami copy-cat bot. Group e reply dile ba 'copy cat' bollei ami copy korbo! 😎")
+    try:
+        bot.reply_to(message, "Arre bhai! Ami copy-cat bot. Group e reply dile ba 'copy cat' bollei ami copy korbo! 😎")
+    except Exception as e:
+        bot.send_message(message.chat.id, "Arre bhai! Ami copy-cat bot. Group e reply dile ba 'copy cat' bollei ami copy korbo! 😎")
 
 # Copy-cat handler
 @bot.message_handler(func=lambda message: True)
@@ -42,8 +45,11 @@ def copy_cat(message):
         if not (is_reply_to_bot or is_called_copycat):
             return
 
-    # Private chat hole normal copy korbe, ar group e condition match korle copy korbe
-    bot.reply_to(message, user_text)
+    # Reply dite giye error asle o jeno crash na kore, tai try-except use kora holo
+    try:
+        bot.reply_to(message, user_text)
+    except Exception as e:
+        bot.send_message(message.chat.id, user_text)
 
 if __name__ == "__main__":
     keep_alive()

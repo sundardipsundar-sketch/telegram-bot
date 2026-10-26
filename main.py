@@ -21,31 +21,31 @@ def keep_alive():
     t = Thread(target=run)
     t.start()
 
-# /start কমান্ড
+# /start command
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    bot.reply_to(message, "আরে ভাই! আমি কপি-ক্যাট বট। ইনবক্সে নরমাল কপি করব, আর গ্রুপে 'copy cat' বললে তবেই চটপট একটিভ হব! 😎")
+    bot.reply_to(message, "Arre bhai! Ami copy-cat bot. Group e amake reply dile ba 'copy cat' bollei ami copy korbo! 😎")
 
-# কপি-ক্যাট হ্যান্ডলার
+# Copy-cat handler
 @bot.message_handler(func=lambda message: True)
 def copy_cat(message):
     user_text = message.text if message.text else ""
     if not user_text:
         return
 
-    # যদি চ্যাটটি গ্রুপ বা সুপারগ্রুপ হয়
+    # Jodi group chat hoy
     if message.chat.type in ['group', 'supergroup']:
+        is_reply_to_bot = message.reply_to_message and message.reply_to_message.from_user.id == bot.get_me().id
         is_called_copycat = "copy cat" in user_text.lower() or "copycat" in user_text.lower()
         
-        # গ্রুপে "copy cat" না বললে বট ইগনোর করবে
-        if not is_called_copycat:
+        # Group e na toh reply kora hoyeche, ar na toh "copy cat" bola hoyeche, tahole ignore korbe
+        if not (is_reply_to_bot or is_called_copycat):
             return
 
-    # পার্সোনাল চ্যাট হলে নরমাল কপি করবে, আর গ্রুপে "copy cat" বললেও কপি করবে
+    # Private chat hole normal copy korbe, ar group e reply ba "copy cat" thakle copy korbe
     bot.reply_to(message, user_text)
 
 if __name__ == "__main__":
     keep_alive()
     print("Copy-cat Bot polling started...")
     bot.infinity_polling()
-    

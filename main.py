@@ -21,28 +21,27 @@ def keep_alive():
     t = Thread(target=run)
     t.start()
 
-# /start command
+# /start কমান্ড
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    bot.reply_to(message, "Arre bhai! Main copy-cat bot hoon. Tu jo bhi bolega, main wahi same to same repeat karunga! 😎")
+    bot.reply_to(message, "আরে ভাই! আমি কপি-ক্যাট বট। ইনবক্সে নরমাল কপি করব, আর গ্রুপে 'copy cat' বললে তবেই চটপট একটিভ হব! 😎")
 
-# Copy-cat handler
+# কপি-ক্যাট হ্যান্ডলার
 @bot.message_handler(func=lambda message: True)
 def copy_cat(message):
-    # Agar group chat hua toh sirf tag ya reply karne par hi kaam karega
-    if message.chat.type in ['group', 'supergroup']:
-        bot_username = bot.get_me().username
-        is_mentioned = message.text and f"@{bot_username}" in message.text
-        is_reply_to_bot = message.reply_to_message and message.reply_to_message.from_user.id == bot.get_me().id
-        
-        if not (is_mentioned or is_reply_to_bot):
-            return
-
     user_text = message.text if message.text else ""
     if not user_text:
         return
 
-    # Tu jo bhi likhega, wahi wapas bhej dega
+    # যদি চ্যাটটি গ্রুপ বা সুপারগ্রুপ হয়
+    if message.chat.type in ['group', 'supergroup']:
+        is_called_copycat = "copy cat" in user_text.lower() or "copycat" in user_text.lower()
+        
+        # গ্রুপে "copy cat" না বললে বট ইগনোর করবে
+        if not is_called_copycat:
+            return
+
+    # পার্সোনাল চ্যাট হলে নরমাল কপি করবে, আর গ্রুপে "copy cat" বললেও কপি করবে
     bot.reply_to(message, user_text)
 
 if __name__ == "__main__":

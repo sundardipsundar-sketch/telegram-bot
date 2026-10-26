@@ -1,18 +1,25 @@
-import telebot
+from flask import Flask
+from threading import Thread
+import os
 
-# আপনার বটের টোকেন এখানে বসানো আছে
-TOKEN = '8668983865:AAFko-GOeu7_AVdSryLhhfr7yJ5twpbYWcc'
+app = Flask('')
 
-bot = telebot.TeleBot(TOKEN)
+@app.route('/')
+def home():
+    print("Ping received!")
+    return "Bot is alive!"
 
-# গ্রুপে যে যা লিখবে, বট হুবহু সেটাই কপি করে পাঠিয়ে দেবে
-@bot.message_handler(func=lambda message: True)
-def group_everyone_copy_bot(message):
-    if message.text and not message.text.startswith('/'):
-        chat_id = message.chat.id
-        user_text = message.text
-        
-        bot.send_message(chat_id, user_text)
+def run():
+    # রেন্ডার থেকে পাওয়া পোর্ট ব্যবহার করবে অথবা ডিফল্ট ৮০০০ পোর্ট ধরবে
+    port = int(os.environ.get("PORT", 8000))
+    app.run(host='0.0.0.0', port=port)
 
-print("Everyone Copy Bot is running 24/7...")
-bot.infinity_polling()
+def keep_alive():
+    t = Thread(target=run)
+    t.start()
+
+# আপনার মূল টেলিগ্রাম বট কোড শুরু হওয়ার আগে এটি কল করে দেবেন
+if __name__ == "__main__":
+    keep_alive()
+    # এখানে আপনার টেলিগ্রাম বটের পোলিং কোড থাকবে (যেমন bot.infinity_polling())
+    

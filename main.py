@@ -3,7 +3,7 @@ from threading import Thread
 import os
 import telebot
 
-TELEGRAM_TOKEN = '8668983865:AAG_ppMVN7Zi_Ph6bWsfVGcFT3zHl-67FN0'
+TELEGRAM_TOKEN = '8668983865:AAE0aaLdDv62uEFYh-wkdKxVpf8bvn08RPU'
 bot = telebot.TeleBot(TELEGRAM_TOKEN)
 
 app = Flask('')
@@ -45,7 +45,7 @@ def copy_cat(message):
         if not (is_reply_to_bot or is_called_copycat):
             return
 
-    # Reply dite giye error asle o jeno crash na kore, tai try-except use kora holo
+    # Reply ba message send korte giye kono error asle o jeno crash na kore
     try:
         bot.reply_to(message, user_text)
     except Exception as e:
